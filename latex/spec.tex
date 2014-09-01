@@ -1,0 +1,181 @@
+\documentclass{article}
+\usepackage{hyperref}       %Package for links
+\usepackage{graphicx}       %Package to include images/graphics
+\include{std}               %Amlesh's LaTeX settings file
+\begin{document}
+\author{Harris Rasheed}
+\title{RefScheduler Specification}
+\maketitle
+
+\tableofcontents
+\pagebreak
+
+\section{Introduction}
+This document is intended to be a specification for the software 'RefScheduler'.
+
+RefScheduler is intended to aid game schedulers in the process of assigning games to referees for any given league. The software is to take availability of a referee, skill level and game times and game difficulty into account in the assigning process in addition to many other criterion.
+
+Contact information for the developer is \href{mailto:harris.rasheed@uwaterloo.ca}{harris.rasheed@uwaterloo.ca}.
+
+\section{Purpose}
+A need was recognised for referee schedulers, particularly in the University of Waterloo Campus Recreation Intramurals program, to have an efficient system in assigning games to referees fairly. The process, paper-based or spreadsheet-based involved time in updating information and carefully assessing the appropriate information. In order to streamline this process, a list of rankings should be generated to select a referee appropriately or the entire referee schedule should be generated.
+
+The original intent is to design the system for football intramurals with the intricacies of UW Campus Rec's scheduling system however there are no major distinguishing features.
+
+\section{Technical Overview}
+This section will cover the details of the system architecture, the technical decisions and the relevant data.
+
+\subsection{Technical Decisions}
+The programming language to be used for development is Java because of the portability functionality it offers over various platforms. This is ideal for transferring the system over multiple computers/systems as well as operating systems. To ensure user-friendliness for the referees in providing their availability, a Microsoft Excel spreadsheet will be used.
+
+The system may later be integrated into a web-based tool to merge with the uWaterloo CAS system; Central Authentication Server. This would provide security benefits.
+
+\subsection{Data}
+Permission will be obtained from each referee to collect, store and use the data relevant to the system. The data that will be needed from referees include:
+\begin{itemize}
+\item Name
+\item Student ID
+\item Phone Number
+\item E-mail
+\item Availability
+\item Minimum number of games per shift
+\item Maximum number of assignments for the season (excluding playoffs)
+\item Referee Certification
+\item First Aid Certification
+\item Returning Referee
+\item Intramural Team Playing for
+\end{itemize}
+This will be collected manually on the referee sign-up form at the Theory Clinic as well as from the Availability spreadsheet that will be submitted by each referee.
+
+Other data that will be held about each referee, but not specifically collected from them, is:
+\begin{itemize}
+\item Number of Assignments
+\item Rating/Skill Level
+\item Pay Level
+\item Evaluation Mark
+\item Examination Mark
+\item Active Status
+\item Miscellaneous Notes
+\end{itemize}
+
+\subsubsection{Data Requirements \& Purpose}
+This section will explain the need and use for the data that will be stored in the system.
+
+The need for simple information such as Name, Phone Number and E-mail can be justified as an employer of any employee; to be able to contact them if the need arises; especially a game cancellation or rescheduling.
+
+The Student ID is used to uniquely identify each student at the University of Waterloo and is vital in game assignment. Referees must have a Student ID in order to be able to be assigned games and paid as the Intramural website prevents this otherwise.
+
+The availability of a referee is crucial in assigning games as games should only be assigned to referees when they are able to do them. Availability will be determined by the days and times that a referees states they are available generally. Before the assigning process is complete, referees' date/period exceptions will have to be processed as well.
+
+It is important to know the minimum number of games that a referee can accept as a shift as there are referees who travel long distances to Columbia Ice Fields to help UW Campus Recreation cover its games and allow the Intramural program thrive. Using this information, the assigning process should ensure that these certain referees as well as the preferences of other referees are enforced in assigning games.
+
+The maximum number of assignments that a referee wants in a season should be honoured so that they do not have to referee more games than they stated they wished. This exception would have to be processed during the assigning process.
+
+Information such as referee certification and first aid certification influence a referee's skill level and pay grade and is typically stored on the referee roster table. This also includes their pay level.
+
+Knowing the intramural team that a referee plays for in the same sport is very important for two different reasons. Referees can have an extremely hard time refereeing their own games as bias comes into play to both extremes; they are too lenient or they are too strict on their team. It also prevents them from having to choose between refereeing or miss playing their own game for which they have paid. Avoiding scheduling during these times can avoid these hassles and reduce the number of potential game drops.
+
+The number of assignments that a referee has been given influences their next game assignment as the amount of game assignments given to all referees must be equal to promote fairness in the scheduling process.
+
+A referee's evaluation mark and examination mark are both influencing factors in game assignments as referees are required to demonstrate their abilites both in a theoretical and practical capacity and it will be a large factor in giving out game assignments to referees.
+
+The status of a referee is important as there tend to be referees who leave the roster mid-way through term i.e. before the end of the season. This happens sometimes because they want more focus on studies, difficulties in refereeing or the inability to progress or develop as a referee to the next pay grade. Referees who are inactive no longer want to be assigned games and should not be considered in the assigning process at all.
+
+The notes section is important to place notes on any referee as the season progresses and I learn more about their personality and abilities.
+
+\subsection{Functionality}
+Some of the functionality of the system will include being able to:
+\begin{itemize}
+\item Input the data collected from the referee roster into a referee roster table.
+\item Amend any field for any referee pertaining to the referee roster table.
+\item Generate a string of e-mails of new, returning and all referees (both active and inactive) for use when e-mail threads need to be sent out using Nexus.
+\item Schedule games automatically by feeding in a game schedule spreadsheet and assigning referees to games appropriately. Output the resulting schedule.
+\item Schedule games manually by inputting the game time and teams involved.
+\item Generate a list of referees who are yet to be evaluated.
+\item Categorise a particular team as a difficult team to manage if they are causing problems and require a more experienced referee.
+\item Validate readability of schedule.
+\item Instant availability feedback of referees available based on sheet.
+\end{itemize}
+
+\subsection{Assigning Algorithm}
+The idea of the game assigning algorithm brings in a lot of concepts in graph theory such as finding a matching and the ideal scenario for the algorithm is to find a matching in the referee, game bipartite graph such that all the game vertices are saturated. Other than this, regardless of the output of the algorithm, there will be likely be issues with game drops, some, that are independent and unforeseeable in the scheduling process.
+
+The scheduling process will work as follows for a given shift.
+
+\begin{enumerate}
+\item Filter out referees who are no longer active.
+\item Filter out referees who are unavailable for the given shift.
+\begin{itemize}
+\item The referee's general availability covers all games in the shift.
+\item The referee isn't playing in any of the games.
+\item The referee isn't already refereeing at the exact same time in a different venue.
+\item The shift length meets the referee's minimum requirement.
+\item The referee hasn't listed a date exception on the current day.
+\end{itemize}
+\item Partition the available referees into two lists.
+\begin{itemize}
+\item Those who have the ability and man management skills to deal with the teams in the shift according to their given rating.
+\item Those who are not yet quite ready for the level; everyone with a lower rating than the teams involved.
+\end{itemize}
+\item Sort the first list by the number of assignments already given to a referee in increasing order. Collisions in the list will be decided as follows.
+\begin{enumerate}
+\item Exam mark classified into brackets so knowledgeable referees get more assignments.
+\item By the referees who have been least recently used so that refererees are kept fit and are given assignments as often as possible.
+\end{enumerate}
+\item Select first referee on the list.
+\begin{itemize}
+\item If the selected referee is from the second list, flag the game for review by the Referee-In-Chief.
+\item If the list is empty, output that no referee is available.
+\item Warning if referee was already used that day.
+\end{itemize}
+\end{enumerate}
+
+\subsection{Scheduling Algorithm}
+The scheduling algorithm is as follows.
+
+\begin{verbatim}
+read schedule
+
+foreach day in schedule
+    split day into shifts
+    
+    foreach shift in day
+        generate refereeList
+        if list is empty
+            continue
+    done
+    
+    sort shifts by size of refereeList in increasing order
+    
+    foreach shift in day
+        assign referee
+        update information in future shift refereeLists for assigned referee
+        re-sort future shift refereeLists
+    done
+done
+\end{verbatim}
+
+\subsubsection{Pre-Scheduling}
+Prior to reading the schedule, the program will have to query:
+\begin{enumerate}
+\item referees required per game (Futsal needs 1 versus Outdoor Soccer needs 2).
+\item a preference to match a returning referee with a new referee for the 2-referee assigning case.
+\item the seperator used in the schedule to denote team face-offs.
+\item the number of games run in parallel per day for every day of the week.
+\item name of the schedule CSV file.
+\end{enumerate}
+It will also verify that availability spreadsheets for each referee on the roster exists.
+\subsubsection{Algorithm Reasoning}
+The scheduling algorithm is very similar to the one that Referee-In-Chiefs implement during the assigning process however it has a minor modification that makes it slightly more intelligent. The idea that the shifts that have the least amount of referees available should be tended to first will prevent cases where a senior referee is assigned a Beginner game (that anyone can do) which leaves the All-Star game without an available referee (both rested and capable).
+\subsubsection{Shift Splitting}
+Creating shifts in a day is an interesting process where games must be allocated to shifts appropriately. A day could possibly have a maximum case of 24 games. This is the extreme case because Columbia Icefields, the facility where intramurals is played, is only open from 8am-12am. We will however account for the maximum case and the shift-splitting algorithm would need to ensure that a maximum of four games are assigned to a referee as anything more would affect their performance and could cause issues.
+
+\section{About}
+The name of the software, 'RefScheduler', and its functionality is unrelated to any existing referee scheduling software online, other than those referenced/credited below. The source code of this software is under the GNU licence; free and available to those who would like to inspect or seek inspiration from it. If you would like to modify or re-use the source code, I would appreciate it if you credit me as the original source. It would be great to hear about it too. I like hearing from those interested.
+
+\section{References}
+Amlesh Jayakumar was great aid in the design and analysis of the assigning and scheduling algorithm.
+
+This software and its name are unrelated to other existing software on the market called RefScheduler and is an individually decided name.
+
+\end{document}
