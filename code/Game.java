@@ -10,15 +10,17 @@ class Game
 
    Game(String faceOff, Time time)
    {
-       //team1 = t1;
-       //team2 = t2;
+      //team1 = t1;
+      //team2 = t2;
 
-       //TODO get rating of highest team and assign it to rating field
-       // set time in the game class
+      //TODO get rating of highest team and assign it to rating field
+      // set time in the game class
    }
+
 
    public int getDifficulty()
    {
-       return 0; //TODO
+      return 0; //TODO
    }
 }
+

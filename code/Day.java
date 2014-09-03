@@ -1,20 +1,18 @@
 import java.util.*;
 
-
-
 // Schedule is the parent class
 class Schedule
 {
-    ArrayList<Day> days;
+   ArrayList<Day> days;
 
-    /**
-     * Finds the number of days in the schedule.
-     * @return the number of days in the schedule
-     */
-    int getNumDays()
-    {
-        return days.size();
-    }
+   /**
+    * Finds the number of days in the schedule.
+    * @return the number of days in the schedule
+    */
+   int getNumDays()
+   {
+      return days.size();
+   }
 }
 
 
@@ -22,21 +20,22 @@ class Schedule
 // Day in the schedule
 class Day
 {
-    ArrayList<Game> games;
-    ArrayList<Shift> shifts;
- 
-    /**
-     * Finds the number of games in the day.
-     * @return the number of games in the day
-     */
-    int getNumGames()
-    {
-        return games.size();
-    }
+   ArrayList<Game> games;
+   ArrayList<Shift> shifts;
 
-    void shiftSplit()
-    {
-    }
+   /**
+    * Finds the number of games in the day.
+    * @return the number of games in the day
+    */
+   int getNumGames()
+   {
+      return games.size();
+   }
+
+
+   void shiftSplit()
+   {
+   }
 }
 
 
@@ -44,6 +43,6 @@ class Day
 // Shift in a day
 class Shift
 {
-    ArrayList<Game> games;
+   ArrayList<Game> games;
 }
 
