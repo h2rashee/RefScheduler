@@ -1,6 +1,8 @@
 RefScheduler
 
-Author: Harris Rasheed  
+========
+
+Author: Harris Rasheed
 
 
 RefScheduler is intended to aid schedulers in the process of assigning games
