@@ -34,6 +34,7 @@ Shift.class: Day.class Day.java
 Schedule.class: Day.class Day.java
 	javac Day.java
 
+
 all:
 	javac *.java
 
@@ -41,6 +42,9 @@ docs:
 	javadoc -d ../docs -private *.java
 
 classes: $(CLASSES:.java=.class)
+
+run:
+	java Main
 
 clean:
 	$(RM) *.class
