@@ -2,6 +2,8 @@
  * The custom Time class was created rather than using the in-built class
  * as there were several unnecessary fields that were not required and
  * more convenient to only use what is needed with my own custom methods.
+ *
+ * This file's parsing mechanism is also very convenient for our end-user
  */
 
 import java.util.*;
