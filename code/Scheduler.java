@@ -16,13 +16,13 @@ class Scheduler
 
       BufferedReader reader =
          new BufferedReader(new InputStreamReader(System.in));
-      System.out.println("Is the information for referees up-to-date? (Y/N)");
+      System.out.println("Is the information for referees up-to-date? (Y/n)");
 
       try
       {
          String answer = reader.readLine();
 
-         if(answer.equalsIgnoreCase("Yes"))
+         if(answer.equalsIgnoreCase("Y") || answer.equals(""))
          {
             while(notQuit)
             {
@@ -41,7 +41,7 @@ class Scheduler
             }
          }
 
-         else if(answer.equalsIgnoreCase("No"))
+         else if(answer.equalsIgnoreCase("N"))
          {
             System.out.println("\nPlease update the roster info.\n");
          }
