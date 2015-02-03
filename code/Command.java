@@ -1,15 +1,14 @@
 import java.io.*;
 import java.util.*;
+import java.awt.datatransfer.*;
+import java.awt.Toolkit;
 
 // Command handler for the menu
 class Command
 {
-   // Number of set commands
-   int numCommands = 7;
-
    // Contains system commands
-   String[] commands = new String[numCommands];
-   ArrayList<String> matchedCommands = new ArrayList<String>();
+   ArrayList<String> commands;
+   ArrayList<String> matchedCommands;
 
    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
@@ -18,13 +17,14 @@ class Command
     */
    Command()
    {
-      commands[0] = "schedule games";
-      commands[1] = "referee e-mail list";
-      commands[2] = "view referee list";
-      commands[3] = "edit referee list";
-      commands[4] = "help";
-      commands[5] = "quit";
-      commands[6] = "schedule";
+      commands = new ArrayList<String>();
+      matchedCommands = new ArrayList<String>();
+      commands.add("schedule games");
+      commands.add("referee e-mail list");
+      commands.add("view referee list");
+      commands.add("edit referee list");
+      commands.add("help");
+      commands.add("quit");
    }
 
 
@@ -47,6 +47,8 @@ class Command
       // Flag to keep menu screen running unless the user quits
       boolean notQuit = true;
 
+      RefereeList rl = new RefereeList();
+
       try
       {
          // Keep reading input
@@ -56,6 +58,11 @@ class Command
             System.out.print("\n> ");
 
             String cmd = reader.readLine();
+
+            if(cmd.equals(""))
+            {
+               continue;
+            }
 
             // Attempt to match input to a specified command
             // and provide a return code
@@ -81,12 +88,20 @@ class Command
                break;
 
                case 1:
+               String emailList = rl.getRefEmailList();
+               System.out.println(emailList);
+               // copy email list to clipboard
+               StringSelection sel = new StringSelection(emailList);
+               Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
+               cb.setContents(sel, sel);
                break;
 
                case 2:
+               rl.printRefList();
                break;
 
                case 3:
+               // open file in vim/editor
                break;
 
                case 4:
@@ -106,7 +121,7 @@ class Command
       catch(Exception e)
       {
          System.err.println("An unexpected error occurred.");
-         System.err.println("Details are as follows:");
+         System.err.print("Please report this error to the system admin: ");
          System.err.println(e);
       }
 
@@ -188,9 +203,9 @@ class Command
    {
       System.out.println("The available system commands are:");
 
-      for(int i = 0; i < numCommands; i++)
+      for(int i = 0; i < commands.size(); i++)
       {
-         System.out.println("\t- " + commands[i]);
+         System.out.println("\t- " + commands.get(i));
       }
    }
 
@@ -229,14 +244,14 @@ class Command
       int matchingCommand = -1;
 
       // Look through each command
-      for(int i = 0; i < numCommands; i++)
+      for(int i = 0; i < commands.size(); i++)
       {
          // If the command is a prefix of a given valid command
-         if(isPrefixSubstring(commands[i], command))
+         if(isPrefixSubstring(commands.get(i), command))
          {
             // Note that a command was matched
             numMatchingCommands++;
-            matchedCommands.add(commands[i]);
+            matchedCommands.add(commands.get(i));
 
             // Store the position of the matched command
             matchingCommand = i;
@@ -252,8 +267,7 @@ class Command
       // Matched the command
       else if(numMatchingCommands == 1)
       {
-         System.out.println("The command '" + command +
-                 "' was interpreted as '" + commands[matchingCommand] + "'\n");
+         System.out.println(commands.get(matchingCommand));
          return matchingCommand;
       }
 
