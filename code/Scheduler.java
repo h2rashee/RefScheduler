@@ -41,7 +41,7 @@ class Scheduler
             }
          }
 
-         else if(answer.equalsIgnoreCase("N"))
+         else if(answer.equalsIgnoreCase("n"))
          {
             System.out.println("\nPlease update the roster info.\n");
          }
