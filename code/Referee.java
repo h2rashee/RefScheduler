@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.*;
+import java.lang.*;
 
 // Referee (represents a person)
 class Referee
@@ -18,20 +19,20 @@ class Referee
 
 
    // Constructor
-   Referee(String firstName1, String lastName1, String email1,
-           boolean returning1, boolean active1,
-           int studentID1, int examMark1, int rating1)
+   Referee(String _firstName, String _lastName, String _email,
+           boolean _returning, boolean _active,
+           int _studentID, int _examMark, int _rating)
    {
-       firstName = firstName1;
-       lastName = lastName1;
-       email = email1;
+       firstName = _firstName;
+       lastName = _lastName;
+       email = _email;
 
-       returning = returning1;
-       active = active1;
+       returning = _returning;
+       active = _active;
 
-       studentID = studentID1;
-       examMark = examMark1;
-       rating = rating1;
+       studentID = _studentID;
+       examMark = _examMark;
+       rating = _rating;
 
        availb = new Availability();
 
@@ -75,6 +76,17 @@ class Referee
    {
       return active;
    }
+
+   public void print()
+   {
+      System.out.println("Name: " + getFullName());
+      System.out.println("Email: " + email);
+      System.out.println("Returning?: " + returning);
+      System.out.println("Active?: " + active);
+      System.out.println("Student ID: " + studentID);
+      System.out.println("Exam Mark: " + examMark);
+      System.out.println("Rating: " + rating);
+   }
 }
 
 
@@ -101,8 +113,80 @@ class RefereeList
 
    RefereeList()
    {
-      //TODO Initialise referee list with referees from random access file
-      //Read records and load into referee list
+      // Read records and load into referee list
+      readRosterFromFile();
+      // Generate master availability table
+      //printRefList();
+   }
+
+
+   /**
+    * Reads the referee data from the file into memory in a RefereeList.
+    */
+   private void readRosterFromFile()
+   {
+      String csvFileName = "config/roster.dat";
+      BufferedReader br = null;
+      String line = "";
+      String delimiter = ",";
+
+      try
+      {
+         boolean firstLine = true;
+         br = new BufferedReader(new FileReader(csvFileName));
+
+         while ((line = br.readLine()) != null)
+         {
+            if(firstLine)
+            {
+               firstLine = false;
+               continue;
+            }
+
+            String[] record = line.split(delimiter);
+
+            Referee ref = new Referee(record[0], record[1], record[2],
+                                      Boolean.parseBoolean(record[3]),
+                                      Boolean.parseBoolean(record[4]),
+                                      Integer.parseInt(record[5]),
+                                      Integer.parseInt(record[6]),
+                                      Integer.parseInt(record[7]));
+            refs.add(ref);
+         }
+      }
+      catch(Exception e)
+      {
+         System.err.println("Error while reading CSV file: " + e);
+      }
+   }
+
+
+   /**
+    * Prints the referee list
+    */
+   public void printRefList()
+   {
+      for(int i = 0; i < getNumReferees(); i++)
+      {
+         System.out.print(refs.get(i).firstName);
+      }
+   }
+
+
+   /**
+    * Collates the e-mails of all the active referees on the roster
+    */
+   public String getRefEmailList()
+   {
+      StringBuilder sb = new StringBuilder();
+      // FIXME Appropriate fix on String Builder
+
+      for(int i = 0; i < getNumReferees(); i++)
+      {
+          sb.append(refs.get(i).email + ";");
+      }
+
+      return sb.toString();
    }
 
 
